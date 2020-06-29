@@ -49,7 +49,7 @@ class lambda_individual:
     def evaluate(self):
 
         if self.restraint() is not bool:
-            self.fitness -= self.restraint()  # if it is a number it subtracted the fitness
+            self.fitness += - abs(self.restraint())  # if it is a number it subtracted the fitness
         return self.fitness  # the function must return the calculated fitness
 
 
