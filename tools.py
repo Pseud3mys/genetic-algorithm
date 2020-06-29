@@ -1,3 +1,6 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
 
 def print_population(pop):
     i = 0
@@ -20,15 +23,15 @@ def get_individual_infos(individual):
     return " genome: " + genome + " Fitness: " + fitness
 
 
-def genetic_algo_test_params(algorithm_object, load_file, number_generation_by_test=50, number_test=10):
+def genetic_algo_test_params(algorithm_object, load_file, number_generation_by_test=50, number_of_test=10):
     all_max = []
     all_min = []
     all_median = []
     all_pop_len = []
 
     # process the genetics algorithms:
-    print("starting evolution...")
-    for i in range(number_test):
+    print("\nstarting evolution...")
+    for i in range(number_of_test):
         all_max.append([])
         all_min.append([])
         all_median.append([])
@@ -44,14 +47,14 @@ def genetic_algo_test_params(algorithm_object, load_file, number_generation_by_t
             all_min[i].append(min_val)
             all_median[i].append(median)
             all_pop_len[i].append(len(algorithm_object.old_population))
-        print("    finished evolution of " + str(i) + "/" + str(number_test))
+        print("    finished evolution of " + str(i) + "/" + str(number_of_test))
 
     # for the graph now:
     x = np.linspace(0, number_generation_by_test, number_generation_by_test)
     max_fitness = []
     min_fitness = []
     median = []
-    for gen in range(number_test):
+    for gen in range(number_of_test):
         max_fitness = np.mean(all_max, axis=0)
         min_fitness = np.mean(all_min, axis=0)
         median = np.mean(all_median, axis=0)
@@ -72,12 +75,12 @@ def genetic_algo_test_params(algorithm_object, load_file, number_generation_by_t
     print(" - average median:  " + str(median[len(median) - 1]))
 
     # show graph
-    print("opening graph...")
+    print("\nopening graph...")
     plt.plot(x, all_max[better_index], color="green", linewidth=2, linestyle="-", alpha=0.4)
     plt.plot(x, all_median[better_index], color="blue", linewidth=2, linestyle="-", alpha=0.35)
     plt.plot(x, max_fitness, color="green", linewidth=2, linestyle="-")
     plt.plot(x, median, color="blue", linewidth=2, linestyle="-")
-    plt.ylabel("fitness")
+    plt.ylabel("fitness (mean)")
     plt.xlabel("number of generations")
     plt.fill_between(x, min_fitness, max_fitness, color="gray", alpha=0.3)
     plt.show()
@@ -88,9 +91,8 @@ def genetic_algo_evolute(algorithm_object, number_of_generation, load_file=None,
         algorithm_object.create_random_old_population()
     else:
         algorithm_object.load_old_population(file_name=load_file)
-    print_population(algorithm_object.old_population)
 
-    print("start population info: ")
+    print("\nstart population info: ")
     max_val, median, min_val = algorithm_object.get_old_pop_infos()
     print(" - best individual: " + get_individual_infos(algorithm_object.old_population[0]))
     print(" - fitness median: " + str(median))
@@ -110,9 +112,10 @@ def genetic_algo_evolute(algorithm_object, number_of_generation, load_file=None,
         len_pop_array.append(len(algorithm_object.old_population))
 
     if save_file is not None:
+        print("")  # jump a line
         algorithm_object.save_old_population(save_file)
 
-    print("final population info: ")
+    print("\nfinal population info: ")
     max_val, median, min_val = algorithm_object.get_old_pop_infos()
     print(" - best individual: " + get_individual_infos(algorithm_object.old_population[0]))
     print(" - fitness median: " + str(median))

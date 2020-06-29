@@ -12,8 +12,11 @@ default_params_probability = [[0, True], 0.1, 0.05, 0.05, 0.08, 0.05]
 
 
 class genetic_algorithm:
-    def __init__(self, params_for_individuals, params_for_probability):
-        self._save_dir = os.getcwd() + "\\saves\\"
+    def __init__(self, params_for_individuals, params_for_probability, save_folder=None):
+        if save_folder is None:
+            self._save_dir = ""
+        else:
+            self._save_dir = os.getcwd() + "\\"+save_folder+"\\"
 
         # individual params:
         self._start_individuals_count = params_for_individuals[0]
@@ -92,8 +95,8 @@ class genetic_algorithm:
         # finally we rank the pop randomly generated
         self.rank_population()
         if debug:
-            print("SAVED " + str(len(self.old_population)) + " individus with " + str(len(self.old_population[0].get_genome())) +
-                  "gene each.")
+            print("CREATED " + str(len(self.old_population)) + " randoms individuals with " + str(len(self.old_population[0].get_genome())) +
+                  " genes each.")
 
     def load_old_population(self, file_name, debug=True):
         # on reset les pop:
